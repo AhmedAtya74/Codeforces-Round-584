@@ -37,42 +37,47 @@ typedef vector<vi64> vvi64;
 const int A1 = 2;
 int main()
 {
-    int N;
-    i64 Ans = 0;
-    cin >> N;
-    string str;
-    cin >> str;
+  
+    int T; cin >> T;
+    for (int i = 0; i < T; i++) {
+        int N; cin >> N;
+        string s; cin >> s;
 
-    vi64 V2(N);
-    for (int j = 0; j < N; j++)
-    {
-        V2[j] = str[j] - '0';
-        Ans += V2[j];
-    }
-    vi64 A(N), B(N);
-    for (int j = 0; j < N; j++)
-    {
-        cin >> A[j];
-        cin >> B[j];
-    }
+        vi ls(N);
+        bool ok = true;
 
-    for (int j = 0; j < 1000; j++)
-    {
-        for (int i = 0; i < N; i++)
+        for (int ln = 0 + '0'; ln < 10 + '0'; ln++) 
         {
-            if (j >= B[i] && (j - B[i]) % A[i] == 0)
+            int fi = -1, se = -1; fill(ls.begin(), ls.end(), -1);
+            ok = true;
+            for (int j = 0; j < N && ok; j++) 
             {
-                V2[i] ^= 1;
+                if (s[j] < ln) 
+                {
+                    if (fi > s[j]) ok = false;
+                    else { fi = s[j]; ls[j] = 1; }
+                }
+                else if (s[j] == ln) 
+                {
+                    if (se <= s[j]) { se = s[j]; ls[j] = 2; }
+                    else { fi = s[j]; ls[j] = 1; }
+                }
+                else if (s[j] > ln) 
+                {
+                    if (se > s[j]) ok = false;
+                    else { se = s[j]; ls[j] = 2; }
+                }
             }
+            if (ok == true) break;
         }
-        i64 Cnt = 0;
-        for (int i = 0; i < N; i++)
-        {
-            Cnt += V2[i];
-        }
-        Ans = max(Ans, Cnt);
-    }
 
-    cout << Ans << endl;
+        if (ok) {
+            for (int x : ls) cout << x; cout << endl;
+        }
+        else {
+            cout << '-' << endl;
+        }
+    }
+    
     return 0;
 }
